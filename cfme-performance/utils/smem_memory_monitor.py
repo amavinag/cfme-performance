@@ -176,6 +176,7 @@ class SmemMemoryMonitor(Thread):
         appliance_results[plottime] = {}
 
         exit_status, meminfo_raw = self.ssh_client.run_command('cat /proc/meminfo')
+        self.ssh_client.close()
         if exit_status:
             logger.error('Exit_status nonzero in get_appliance_memory: {}, {}'.format(exit_status,
                 meminfo_raw))
@@ -203,6 +204,7 @@ class SmemMemoryMonitor(Thread):
     def get_evm_workers(self):
         exit_status, worker_types = self.ssh_client.run_command(
             'psql -t -q -d vmdb_production -c \'select pid,type from miq_workers\'')
+        self.ssh_client.close()
         if worker_types.strip():
             workers = {}
             for worker in worker_types.strip().split('\n'):
@@ -234,6 +236,7 @@ class SmemMemoryMonitor(Thread):
     def get_pids_memory(self):
         exit_status, smem_out = self.ssh_client.run_command(
             'smem -c \'pid rss pss uss vss swap name command\' | sed 1d')
+        self.ssh_client.close()
         pids_memory = smem_out.strip().split('\n')
         memory_by_pid = {}
         for line in pids_memory:
@@ -358,6 +361,7 @@ def install_smem(ssh_client):
     # Patch smem to display longer command line names
     logger.info('Patching smem')
     ssh_client.run_command('sed -i s/\.27s/\.200s/g /usr/bin/smem')
+    ssh_client.close()
 
 
 def create_report(test_dir, results_dir, test_name, app_roles, provider_names, appliance_results,

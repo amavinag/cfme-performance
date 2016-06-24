@@ -74,5 +74,5 @@ def test_refresh_providers(request, scenario):
         else:
             logger.warn('Time to Queue Refreshes ({}) exceeded time between Refreshes({})'.format(
                 refresh_time, time_between_refresh))
-
+    ssh_client.close()
     logger.info('Test Ending...')

@@ -62,4 +62,5 @@ def test_workload_capacity_and_utilization(request, scenario):
         elif time_left > 0:
             time.sleep(300)
 
+    ssh_client.close()
     logger.info('Test Ending...')

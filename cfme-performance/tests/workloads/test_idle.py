@@ -44,5 +44,5 @@ def test_idle(request):
     s_time = cfme_performance['workloads']['test_idle']['total_time']
     logger.info('Idling appliance for {}s'.format(s_time))
     time.sleep(s_time)
-
+    ssh_client.close()
     logger.info('Test Ending...')
