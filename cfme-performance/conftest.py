@@ -18,12 +18,17 @@ def pytest_addoption(parser):
     group = parser.getgroup('perf')
     group.addoption('--appliance', dest='appliance', default=None,
                     help="Run tests with the appliance ip as command line option.")
+    group.addoption('--appliance-name', dest='appliance_name', default=None,
+                    help="Run tests with the appliance ip as command line option.")
 
 
 def pytest_configure(config):
     if config.option.appliance:
         perf_data['appliance']['ip_address'] = config.option.appliance
+    if config.option.appliance_name:
+        perf_data['appliance']['appliance_name'] = config.option.appliance_name
     logger().info('Appliance IP is {}'.format(perf_data['appliance']['ip_address']))
+    logger().info('Appliance name is {}'.format(perf_data['appliance']['appliance_name']))
 
 
 def pytest_collection_modifyitems(session, config, items):
